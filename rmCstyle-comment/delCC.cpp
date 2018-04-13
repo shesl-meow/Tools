@@ -39,7 +39,7 @@ int main(int argc,char *argv[]){
 		in.close();
 		out.close();
 
-		printf("%s-->%s done!",argv[1],argv[2]);
+		printf("%s-->%s done!\n",argv[1],argv[2]);
 		argc -= 2, argv += 2;
 	}
 	return 0;
