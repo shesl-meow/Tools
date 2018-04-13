@@ -33,7 +33,7 @@ int main(int argc,char *argv[]){
 			else{
 				out.put('\n');
 				while( ((next = in.get()) != '\n'))
-					if(!in.eof()) break;
+					if(in.eof()) break;
 			}
 		}
 		in.close();
