@@ -26,9 +26,10 @@ int main(int argc,char *argv[]){
 		while(!in.eof())
 		{
 			in.get(cur);
-			if(cur>='a' && cur<='z')
-				out<<cur+'A'-'a';
-			else
+			if(cur>='a' && cur<='z'){
+				cur = char(cur+'A'-'a');
+				out<<cur;
+			}else
 				out<<cur;
 		}
 		in.close();
