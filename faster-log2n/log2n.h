@@ -4,7 +4,7 @@ static const unsigned int b[]={
 	0x2,0xC,0xF0,0xFF00,0xFFFF0000,0xFFFFFFFF00000000};
 static const unsigned int S[]={1,2,4,8,16,32};
 
-unsigned int log2n(unsigned int v,const int n=5)
+unsigned int log2n(unsigned int v,const int n=4)
 {
 	register unsigned int r = 0;
 	for(int i=n; i>=0; --i)
@@ -13,6 +13,7 @@ unsigned int log2n(unsigned int v,const int n=5)
 			v >>= S[i];
 			r |= S[i];
 		}
+	return r;
 }
 
 unsigned int log2n_32(unsigned int v)
@@ -57,17 +58,19 @@ static const unsigned int b1[]={
 	0xAAAAAAAA,0xCCCCCCCC,0xF0F0F0F0,0xFF00FF00,0xFFFF0000};
 unsigned int log2n_32p2(unsigned int v)
 {
-	register unsigned int r = (v & bb[0]) != 0;
+	register unsigned int r = (v & b1[0]) != 0;
 	for(int i=4; i>0; --i)
-		r |= ((v & bb[i]) != 0) << i;
+		r |= ((v & b1[i]) != 0) << i;
+	return r;
 }
 //and there is algorithm for 64bits number.
-static const unsigned int bb[]={
+static const unsigned int b2[]={
 	0xAAAAAAAAAAAAAAAA,0xCCCCCCCCCCCCCCCC,0xF0F0F0F0F0F0F0F0,
 	0xFF00FF00FF00FF00,0xFFFF0000FFFF0000,0xFFFFFFFF00000000};
 unsigned int log2n_64p2(unsigned int v)
 {
-	register unsigned int r = (v & bb[0]) != 0;
+	register unsigned int r = (v & b2[0]) != 0;
 	for(int i=5; i>0; --i)
-		r |= ((v & bb[i]) != 0) << i;
+		r |= ((v & b2[i]) != 0) << i;
+	return r;
 }
