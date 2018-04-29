@@ -9,7 +9,7 @@ int main()
 		cout<<"please enter a integer. a=?";
 		cin>>a;
 		if(a<=0) break;
-		cout<<"\nsr factorial of a is:"<<SR::Fact(a)<<endl;
+		cout<<"sr factorial of a is:"<<SR::Fact(a)<<endl;
 		cout<<"bs factorial of a is:"<<BS::Fact(a)<<endl;
 	}
 	return 0;
