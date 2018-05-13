@@ -2,7 +2,7 @@
 
 1. safe, complex and clumsy c++
 
-2. dangerous(i have set protection as far as i can) and swift c 
+2. dangerous(i have set protection as far as i can, and the warning messages from gcc complier was stored in debug.txt) and swift c 
 
 **usage of program**:
 
@@ -30,7 +30,8 @@ Then type in the following command in *command line*:
 There will be codes without comments in dest.cpp which is a file *alread exit*.eg:
 
 ```c++
-int main(){
+int main()
+{
 	return 0;
 }
 ```
