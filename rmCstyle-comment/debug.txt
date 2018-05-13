@@ -1,0 +1,29 @@
+delCC.c: In function 'main':
+delCC.c:82:3: warning: passing argument 1 of 'fputs' from incompatible pointer type [enabled by default]
+   fputs(out,node->buff);
+   ^
+In file included from delCC.c:2:0:
+c:\win-builds\x86_64-w64-mingw32\include\stdio.h:453:15: note: expected 'const char * __restrict__' but argument is of type 'struct FILE *'
+   int __cdecl fputs(const char * __restrict__ _Str,FILE * __restrict__ _File);
+               ^
+delCC.c:82:3: warning: passing argument 2 of 'fputs' from incompatible pointer type [enabled by default]
+   fputs(out,node->buff);
+   ^
+In file included from delCC.c:2:0:
+c:\win-builds\x86_64-w64-mingw32\include\stdio.h:453:15: note: expected 'struct FILE * __restrict__' but argument is of type 'char *'
+   int __cdecl fputs(const char * __restrict__ _Str,FILE * __restrict__ _File);
+               ^
+delCC.c:86:4: warning: passing argument 1 of 'fputs' from incompatible pointer type [enabled by default]
+    fputs(out,node->buff);
+    ^
+In file included from delCC.c:2:0:
+c:\win-builds\x86_64-w64-mingw32\include\stdio.h:453:15: note: expected 'const char * __restrict__' but argument is of type 'struct FILE *'
+   int __cdecl fputs(const char * __restrict__ _Str,FILE * __restrict__ _File);
+               ^
+delCC.c:86:4: warning: passing argument 2 of 'fputs' from incompatible pointer type [enabled by default]
+    fputs(out,node->buff);
+    ^
+In file included from delCC.c:2:0:
+c:\win-builds\x86_64-w64-mingw32\include\stdio.h:453:15: note: expected 'struct FILE * __restrict__' but argument is of type 'char *'
+   int __cdecl fputs(const char * __restrict__ _Str,FILE * __restrict__ _File);
+               ^
