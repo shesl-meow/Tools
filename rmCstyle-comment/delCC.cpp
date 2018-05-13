@@ -1,4 +1,4 @@
-#include "../inter.h"
+#include "../interaction.h"
 
 int main(int argc,char *argv[]){
 	list<string> ARGV = makelist(argc,argv);
