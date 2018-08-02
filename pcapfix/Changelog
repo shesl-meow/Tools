@@ -1,0 +1,103 @@
+pcapfix Changelog
+*****************
+
+1.1.0 - 31.08.2014
+------------------
+* added checks for valid pcapng format (epb)
+* added --outfile parameter to chose fixed file name
+* improved pcapng packet alignment (pb, spb, nrb)
+* improved pcapng option fields handling
+* improved status and verbosity outputs
+* fixed reparation bugs with swapped pcap files
+* fixed MacOS compile problem
+* fixed windows output file name extension missing
+* fixed many minor bugs
+
+1.0.2 - 18.02.2014
+------------------
+* added support for files larger than 2GB on 32bit systems
+
+1.0.1 - 03.11.2013
+------------------
+* added reparation block type id zero (pcapng)
+* added reparation of capture length inside EPB (pcapng)
+* set data link type to ethernet on missing header (pcap)
+* changed missing pcap header threshold
+* fixed minor bugs
+
+1.0.0 - 12.10.2013
+------------------
+* added pcapng support
+* added nanoseconds support (Issue #1)
+* improved console output
+* minor bugs fixed
+
+0.7.3 - 16.06.2013
+------------------
+* added snoop file detection
+* added large file support on 32bit architectures
+* improved missing header detection
+* fixed compiling errors on hurd and kfreebsd architectures
+* fixed minor bugs
+
+0.7.2 - 30.03.2013
+------------------
+* compiles on Apple systems properly now
+* fixed problems installing man-pages (on some systems)
+
+0.7.1 - 03.01.2013
+------------------
+* REALLY fixed file pointer exception on windows64 systems
+* updated man-page
+
+0.7 - 18.10.2012
+----------------
+* added support for swapped (big endian) pcap files
+* compiles on OpenBSD properly now
+* fixed file pointer exception on windows64 systems
+* fixed detection bug when corrupted packet is larger than 65536 bytes
+* fixed minimal packet limit to cope with wlan traffic
+
+0.6 - 20.05.2012
+----------------
+* added deep scan option (-d) to force packet detection inside the whole file
+* detects ascii-corruption in pcap header (unix->win)
+* improved global header and packet checks (0 <= usec <= 1000000)
+* repair files that first packet is entirely corrupted
+* repair oversized packets
+* improved last packet mismatch correction
+* fixed reading packets over EOF
+
+0.5 - 05.05.2012
+----------------
+* repair files that packets were not saved chronologically
+* detect and repair overlapping packets
+* detect and repair cut-off pcap files
+* detect and repair ascii-mode transfered pcap files (pcap headers only!)
+* added progress bar
+* added man-page
+
+0.4 - 27.04.2012
+----------------
+* completely redesigned packet detection algorithm (replaced bottom-up-recovery with brute-force-packet-guessing)
+* improved detection rate by additional plausability checks
+* increased speed when repairing large pcap files
+
+0.3 - 31.03.2012
+----------------
+* when recovering packets size will be checked to be smaller than 65536
+* added recognition when a file does not seem to be a pcap file at all
+* compiles on windows systems properly now (tested with dev-cpp)
+* added option to manually select data link type
+
+0.2 - 11.03.2012
+----------------
+* pcapfix compiles on 64bit systems correctly now
+* fixed segfault when no filename was given
+* fixed (input) file not found bug on directory differ
+* added recognition of other data link types beside ethernet in global header
+* added source code documentation
+
+0.1 - 01.03.2012
+----------------
+* this is the first version, everything has changed thou :-)

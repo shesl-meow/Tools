@@ -1,0 +1,396 @@
+.TH PCAPFIX 1 "31 AUG 2014"
+
+.SH "NAME"
+pcapfix \- repair pcap and pcapng files
+
+.SH "SYNOPSIS"
+\fBpcapfix\fP [\-d] [\-n] [\-o filename] [\-t DATA_LINK_TYPE] [\-v] filename
+
+.SH "DESCRIPTION"
+Pcapfix is a tool to repair your damaged or corrupted pcap and pcapng files. It is written in C and released under the GNU General Public License.
+
+To fix your pcap files the tool first checks for an intact pcap global header and repairs it if there are some corrupted bytes. It there seems to be no global header at all, pcapfix adds a self-created one at the beginning of the file. In a second step the tool tries to find pcap packet headers inside the file, below the global header. It checks if the values are correct (or seem to be correct) and tries to repair a packet if there is something wrong.
+
+To fix your pcapng files the tool loops through all packet headers that can be found in the file. It checks for mandatory Section Header and Interface Description Block and creates them if missing. Pcapfix checks for correct block sizes and valid option fields. If something is wrong, invalid fields are repaired (if possible) or skipped and adjusted to finally get a proper pcapng file.
+
+.SH "OPTIONS"
+.TP 5
+\-d, \-\-deep\-scan
+Force deep scan (default = 0)
+.br
+This option will force pcapfix to scan for any packet inside the whole file (instead of the first 65535 bytes only).
+.TP
+\-n, \-\-pcapng
+Force File Format to PCAPNG (default = 0)
+.br
+This option will force pcapfix to repair the input file as it were in pcapng format (useful for destroyed file headers).
+.TP
+\-o, \-\-outfile <filename>
+Set the output file name. Default will be input file prepended by "fixed_".
+.TP
+\-t, \-\-data\-link\-type <nr>
+Data Link Type (default = 1)
+.br
+(See NOTES section below.)
+.TP
+\-v, \-\-verbose
+Enable verbose output (default = 0)
+.br
+You can use multiple \-v options to increase verbosity.
+.br
+An verbosity of 2 will result in very much output data during package search.
+
+.SH "EXAMPLES"
+.TP 5
+Repair the pcap file using deep scan mode, because large blocks of the file are corrupted.
+pcapfix \-d file.pcap
+.TP
+Repair the file damaged_file.pcapng using verbose output.
+pcapfix \-v damaged_file.pcapng
+.TP
+Repair the file wlan_traffic.pcap and force the data link type to be 119 (PRISM HEADER).
+pcapfix \-t 119 wlan_traffic.pcap
+.TP
+Repair the file damaged.pcapng which file header is corrupted and force its format to be pcapng.
+pcapfix \-n damaged.pcapng
+
+.SH "NOTES"
+.TP 5
+\fIDeep scan\fP
+
+In classic pcap files, pcapfix will only scan the first 65536 bytes (maximum packet length) for a proper first packet. If you want to force packet detection even above this limit (e.g. because your file has been heavily destroyed) you can use the deep scan option (\-d).
+
+This option is not necessary for pcapng files because the whole file is arranged in blocks that are 'unlimited' by default. In result pcapfix will always scan the whole pcapng file for further blocks.
+
+.TP
+\fIPCAPNG Format\fP
+
+Pcapfix will try to identify the file format to repair (pcap / pcapng) before doing any further checks. If the header itself is corrupted, it will assume the format to be classic pcap. To change this behaviour you can force the tool to do a pcapng-repair by supplying \-n (\-\-pcapng) option.
+
+.TP
+\fIVerbosity\fP
+
+You can use multiple \-v options to increase verbosity. An verbosity of 2 will result in very much output data during package search.
+
+.TP
+\fIASCII-mode transferred Files (FTP)\fP
+
+Pcapfix is able to repair pcap files that have been transferred in ascii-mode via FTP. In those files a proper pcap structure will be created only to make them readable by wireshark etc. The data inside the packets (and some pcap headers) might still be corrupted. To repair those packets a deeper look inside the packet structure (e.g. checksum) will be necessary.
+
+.TP
+\fIData Link Types\fP
+
+You can make pcapfix change / select your data link type by supplying \-t option. Although you may select a data link type number between 0 and 255, only the following types are assigned: If the data link type field is corrupt, pcapfix will selct LINKTYPE_ETHERNET by default.
+
+See http://www.tcpdump.org/linktypes.html for futher information.
+
+NUMBER	LINK_TYPE
+
+0	LINKTYPE_NULL
+.br
+1	LINKTYPE_ETHERNET
+.br
+6	LINKTYPE_TOKEN_RING
+.br
+7	LINKTYPE_ARCNET_BSD
+.br
+8	LINKTYPE_SLIP
+.br
+9	LINKTYPE_PPP
+.br
+10	LINKTYPE_FDDI
+.br
+50	LINKTYPE_PPP_HDLC
+.br
+51	LINKTYPE_PPP_ETHER
+.br
+100	LINKTYPE_ATM_RFC1483
+.br
+101	LINKTYPE_RAW
+.br
+104	LINKTYPE_C_HDLC
+.br
+105	LINKTYPE_IEEE802_11
+.br
+107	LINKTYPE_FRELAY
+.br
+108	LINKTYPE_LOOP
+.br
+113	LINKTYPE_LINUX_SLL
+.br
+114	LINKTYPE_LTALK
+.br
+117	LINKTYPE_PFLOG
+.br
+119	LINKTYPE_PRISM_HEADER
+.br
+122	LINKTYPE_IP_OVER_FC
+.br
+123	LINKTYPE_SUNATM
+.br
+127	LINKTYPE_IEEE802_11_RADIO
+.br
+129	LINKTYPE_ARCNET_LINUX
+.br
+138	LINKTYPE_APPLE_IP_OVER_IEEE1394
+.br
+139	LINKTYPE_MTP2_WITH_PHDR
+.br
+140	LINKTYPE_MTP2
+.br
+141	LINKTYPE_MTP3
+.br
+142	LINKTYPE_SCCP
+.br
+143	LINKTYPE_DOCSIS
+.br
+144	LINKTYPE_LINUX_IRDA
+.br
+147-162	LINKTYPE_USER0-LINKTYPE-USER15
+.br
+163	LINKTYPE_IEEE802_11_RADIO_AVS
+.br
+166	LINKTYPE_PPP_PPPD
+.br
+169	LINKTYPE_GPRS_LLC
+.br
+177	LINKTYPE_LINUX_LAPD
+.br
+187	LINKTYPE_BLUETOOTH_HCI_H4
+.br
+189	LINKTYPE_USB_LINUX
+.br
+192	LINKTYPE_PPI
+.br
+195	LINKTYPE_IEEE802_15_4
+.br
+196	LINKTYPE_SITA
+.br
+197	LINKTYPE_ERF
+.br
+201	LINKTYPE_BLUETOOTH_HCI_H4_WITH_PHDR
+.br
+202	LINKTYPE_AX25_KISS
+.br
+203	LINKTYPE_LAPD
+.br
+204	LINKTYPE_PPP_WITH_DIR
+.br
+205	LINKTYPE_C_HDLC_WITH_DIR
+.br
+206	LINKTYPE_FRELAY_WITH_DIR
+.br
+209	LINKTYPE_IPMB_LINUX
+.br
+215	LINKTYPE_IEEE802_15_4_NONASK_PHY
+.br
+220	LINKTYPE_USB_LINUX_MMAPPED
+.br
+224	LINKTYPE_FC_2
+.br
+225	LINKTYPE_FC_2_WITH_FRAME_DELIMS
+.br
+226	LINKTYPE_IPNET
+.br
+227	LINKTYPE_CAN_SOCKETCAN
+.br
+228	LINKTYPE_IPV4
+.br
+229	LINKTYPE_IPV6
+.br
+230	LINKTYPE_IEEE802_15_4_NOFCS
+.br
+231	LINKTYPE_DBUS
+.br
+235	LINKTYPE_DVB_CI
+.br
+236	LINKTYPE_MUX27010
+.br
+237	LINKTYPE_STANAG_5066_D_PDU
+.br
+239	LINKTYPE_NFLOG
+.br
+240	LINKTYPE_NETANALYZER
+.br
+241	LINKTYPE_NETANALYZER_TRANSPARENT
+.br
+242	LINKTYPE_IPOIB
+.br
+243	LINKTYPE_MPEG_2_TS
+.br
+244	LINKTYPE_NG40
+.br
+245	LINKTYPE_NFC_LLCP
+
+.SH "DEVELOPMENT"
+This tool is still under development! Please send any further wishes, feature requests or problems in compiling and execution to ruport@f00l.de. Additionally You may send me pcap/pcapng files that could not be repaired too in order to improve pcapfix and get your file repaired.
+
+For further information visit the pcapfix homepage at http://f00l.de/pcapfix/.
+
+.SH "MESSAGES AND EXIT CODES"
+ 1	, file was corrupted and has been repaired
+.br
+ 0	, file is proper; nothing to repair
+.br
+\-1	, invalid options / parameters given
+.br
+\-2	, cannot open input file for reading
+.br
+\-3	, cannot open output file for writing
+.br
+\-4	, input file is empty
+.br
+\-5	, input file is too small
+.br
+\-6	, file type not supported
+.br
+\-11	, not a pcap/pcapng file
+.br
+\-12	, unable to repair the file
+.br
+\-13	, EOF while reading input file
+.br
+\-255	, unknown error
+
+.SH "HISTORY"
+.TP 5
+1.1.0 - 31.08.2013
+* added checks for valid pcapng format (epb)
+.br
+* added \-\-outfile parameter to chose fixed file name
+.br
+* improved pcapng packet alignment (pb, spb, nrb)
+.br
+* improved pcapng option fields handling
+.br
+* improved status and verbosity outputs
+.br
+* fixed reparation bugs with swapped pcap files
+.br
+* fixed MacOS compile problem
+.br
+* fixed windows output file name extension missing
+.br
+* fixed many minor bugs
+.TP
+1.0.2 - 18.02.2013
+* added support for files larger than 2GB on 32bit systems
+.TP
+1.0.1 - 03.11.2013
+* added reparation block type id zero (pcapng)
+.br
+* added reparation of capture length inside EPB (pcapng)
+.br
+* set data link type to ethernet on missing header (pcap)
+.br
+* changed missing pcap header threshold             
+.br
+* fixed minor bugs
+.TP
+1.0.0 - 12.10.2013
+* added pcapng support
+.br
+* added nanoseconds support (Issue #1)
+.br
+* improved console output
+.br
+* minor bugs fixed
+.TP
+0.7.3 - 16.06.2013
+* added snoop file detection
+.br
+* added large file support on 32bit architectures
+.br
+* improved missing header detection
+.br
+* fixed compiling errors on hurd and kfreebsd architectures
+.br
+* fixed minor bugs
+.TP
+0.7.2 - 30.03.2013
+* compiles on Apple systems properly now
+.br
+* fixed problems installing man-pages (on some systems)
+.TP
+0.7.1 - 03.01.2013
+* REALLY fixed file pointer exception on windows64 systems
+.br
+* updated man-page
+.TP
+0.7 - 18.10.2012
+* added support for swapped (big endian) pcap files
+.br
+* compiles on OpenBSD properly now
+.br
+* fixed file pointer exception on windows64 systems
+.br
+* fixed detection bug when corrupted packet is larger than 65536 bytes
+.br
+* fixed minimal packet limit to cope with wlan traffic
+.TP
+0.6 - 20.05.2012
+* added deep scan option (\-d) to force packet detection inside the whole file
+.br
+* detects ascii-corruption in pcap header (unix->win)
+.br
+* improved global header and packet checks (0 <= usec <= 1000000)
+.br
+* repair files that first packet is entirely corrupted
+.br
+* repair oversized packets
+.br
+* improved last packet mismatch correction
+.br
+* fixed reading packets over EOF
+.TP
+0.5 - 05.05.2012
+* repair files that packets were not saved chronologically
+.br
+* detect and repair overlapping packets
+.br
+* detect and repair cut-off pcap files
+.br
+* detect and repair ascii-mode transferred pcap files (pcap headers only!)
+.br
+* added progress bar
+.br
+* added man-page
+.TP
+0.4 - 27.04.2012
+* completely redesigned packet detection algorithm (replaced bottom-up-recovery with brute-force-packet-guessing)
+.br
+* improved detection rate by additional plausability checks
+.br
+* increased speed when repairing large pcap files
+.TP
+0.3 - 31.03.2012
+* when recovering packets size will be checked to be smaller than 65536
+.br
+* added recognition when a file does not seem to be a pcap file at all
+.br
+* compiles on windows systems properly now (tested with dev-cpp)
+.br
+* added option to manually select data link type
+.TP
+0.2 - 11.03.2012
+* pcapfix compiles on 64bit systems correctly now
+.br
+* fixed segfault when no filename was given
+.br
+* fixed (input) file not found bug on directory differ
+.br
+* added recognition of other data link types beside ethernet in global header
+.br
+* added source code documentation
+.TP
+0.1 - 01.03.2012
+* this is the first version, everything has changed thou :-)
+
+.SH "COPYRIGHT"
+Copyright (c) 2012-2014 Robert Krause
+
+Pcapfix is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+Pcapfix is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+.SH "AUTHOR"
+Written by Robert Krause <ruport@f00l.de>.
